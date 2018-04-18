@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 data = json.load(open('stakeholder-list.json'))
 
-MIN_QUORUM = 11
-MAX_QUORUM = 61
+MIN_QUOTA = 11
+MAX_QUOTA = 61
 
 N = 10
 
@@ -34,8 +34,8 @@ def plot(phi_plus, phi_minus):
     for i in range(1, N-2):
         # print "phi_plus[", i, "] = ", phi_plus[i-1]
         plt_label = "i = " + str(i)
-        plt.plot(range(MIN_QUORUM, MAX_QUORUM+1, 5), phi_plus[i-1], label=plt_label, marker='o')
-    plt.xlabel('QUORUM')
+        plt.plot(range(MIN_QUOTA, MAX_QUOTA+1, 5), phi_plus[i-1], label=plt_label, marker='o')
+    plt.xlabel('QUOTA')
     plt.ylabel('phi +')
     plt.legend()
 
@@ -43,8 +43,8 @@ def plot(phi_plus, phi_minus):
     for i in range(1, N-2):
         # print "phi_minus[", i, "] = ", phi_minus[i-1]
         plt_label = "i = " + str(i)
-        plt.plot(range(MIN_QUORUM, MAX_QUORUM+1, 5), phi_minus[i-1], label=plt_label, marker='o')
-    plt.xlabel('QUORUM')
+        plt.plot(range(MIN_QUOTA, MAX_QUOTA+1, 5), phi_minus[i-1], label=plt_label, marker='o')
+    plt.xlabel('QUOTA')
     plt.ylabel('phi -')
     plt.legend()
 
@@ -58,8 +58,8 @@ def main():
     for i in range(1, N-2):
         phi_plus[i-1] = []
         phi_minus[i-1] = []
-        for q in range(MIN_QUORUM, MAX_QUORUM+1, 5):
-            QUORUM = q * (100 - data[9]["weight"]) / 100.0
+        for q in range(MIN_QUOTA, MAX_QUOTA+1, 5):
+            QUOTA = q * (100 - data[9]["weight"]) / 100.0
             delta_plus = 0
             delta_minus = 0
             for perm in all_perm:
@@ -75,9 +75,9 @@ def main():
 
                 s1 = len(sets[0])
                 s2 = len(sets[1])
-                delta_plus += (voting(sets[0] + [i], sets[1], QUORUM) - voting(sets[0], sets[1], QUORUM))*math.factorial(s1)*math.factorial(N - s1 - 1)
-                delta_minus += (voting(sets[1], sets[0], QUORUM) - voting(sets[1], sets[0] + [i], QUORUM))*math.factorial(s2)*math.factorial(N - s2 - 1)
-            print "(", i, ") quorum : ", QUORUM, ", delta_plus : ", delta_plus, ", delta_minus : ", delta_minus
+                delta_plus += (voting(sets[0] + [i], sets[1], QUOTA) - voting(sets[0], sets[1], QUOTA))*math.factorial(s1)*math.factorial(N - s1 - 1)
+                delta_minus += (voting(sets[1], sets[0], QUOTA) - voting(sets[1], sets[0] + [i], QUOTA))*math.factorial(s2)*math.factorial(N - s2 - 1)
+            print "(", i, ") quota : ", QUOTA, ", delta_plus : ", delta_plus, ", delta_minus : ", delta_minus
             phi_plus[i-1].append(delta_plus/math.factorial(N))
             phi_minus[i-1].append(delta_minus/math.factorial(N))
     plot(phi_plus, phi_minus)
